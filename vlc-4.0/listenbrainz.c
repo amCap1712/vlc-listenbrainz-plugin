@@ -99,10 +99,6 @@ static int  Open            (vlc_object_t *);
 static void Close           (vlc_object_t *);
 static void *Run            (void *);
 
-/*****************************************************************************
- * Module descriptor
- ****************************************************************************/
-
 #define USERTOKEN_TEXT      N_("User token")
 #define USERTOKEN_LONGTEXT  N_("The user token of your listenbrainz account")
 #define URL_TEXT            N_("Submission URL")
@@ -114,6 +110,10 @@ static void *Run            (void *);
 /* listenbrainz client identifier */
 #define CLIENT_NAME     PACKAGE
 #define CLIENT_VERSION  VERSION
+
+/*****************************************************************************
+ * Module descriptor
+ ****************************************************************************/
 
 vlc_module_begin ()
     set_category(CAT_INTERFACE)
@@ -489,14 +489,13 @@ static void HandleInterval(vlc_tick_t *next, unsigned int *i_interval)
 }
 
 /*****************************************************************************
- * Run : call Handshake() then submit songs
+ * Run : submit songs
  *****************************************************************************/
 static void *Run(void *data)
 {
     intf_thread_t          *p_intf = data;
     uint8_t                 p_buffer[1024];
     int                     canc = vlc_savecancel();
-    bool                    b_nowp_submission_ongoing = false;
     char                    *psz_url, *psz_submission_url;
     int                     i_ret;
     time_t                  timestamp;
@@ -532,7 +531,7 @@ static void *Run(void *data)
             free(p_sys->psz_user_token);
             /* usertoken not set */
             vlc_dialog_display_error(p_intf,
-                                     _("Listenbraiz usertoken not set"),
+                                     _("Listenbrainz usertoken not set"),
                                      "%s", _("Please set a user token or disable the "
                                              "listenbrainz plugin, and restart VLC.\n"
                                              "Visit https://listenbrainz.org/profile/ to get a user token."));
@@ -565,7 +564,6 @@ static void *Run(void *data)
         vlc_mutex_lock(&p_sys->lock);
 
         url = &p_sys->p_submit_url;
-        b_nowp_submission_ongoing = true;
         i_interval = 0;
         next_exchange = VLC_TICK_INVALID;
 
@@ -663,7 +661,6 @@ static void *Run(void *data)
             i_interval = 0;
             next_exchange = VLC_TICK_INVALID;
             msg_Dbg(p_intf, "Submission successful!");
-
         } else {
             msg_Warn(p_intf, "Error: %s", strstr((char *) p_buffer, "FAILED"));
             HandleInterval(&next_exchange, &i_interval);
