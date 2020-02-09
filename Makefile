@@ -4,46 +4,46 @@ CC = cc
 PKG_CONFIG = pkg-config
 INSTALL = install
 CFLAGS = -g -O2 -Wall -Wextra
-LDFLAGS =
+LDFLAGS = -pthread
 LIBS =
 VLC_PLUGIN_CFLAGS := $(shell $(PKG_CONFIG) --cflags vlc-plugin)
 VLC_PLUGIN_LIBS := $(shell $(PKG_CONFIG) --libs vlc-plugin)
+VLC_PLUGIN_DIR := $(shell $(PKG_CONFIG) --variable=pluginsdir vlc-plugin)
 
-libdir = $(PREFIX)/lib
-plugindir = $(libdir)/vlc/plugins
+plugindir = $(VLC_PLUGIN_DIR)/misc
 
 override CC += -std=gnu99
 override CPPFLAGS += -DPIC -I. -Isrc
 override CFLAGS += -fPIC
 override LDFLAGS += -Wl,-no-undefined,-z,defs
 
-#override CPPFLAGS += -DMODULE_STRING=\"foo\"
+override CPPFLAGS += -DMODULE_STRING=\"listenbrainz\"
 override CFLAGS += $(VLC_PLUGIN_CFLAGS)
 override LIBS += $(VLC_PLUGIN_LIBS)
 
-TARGETS = vlc_listenbrainz_plugin.so
+TARGETS = liblistenbrainz_plugin.so
 
-all: vlc_listenbrainz_plugin.so
+all: liblistenbrainz_plugin.so
 
 install: all
-		mkdir -p -- $(DESTDIR)$(plugindir)/misc
-		$(INSTALL) --mode 0755 vlc_listenbrainz_plugin.so $(DESTDIR)$(plugindir)/misc
+		mkdir -p -- $(DESTDIR)$(plugindir)
+		$(INSTALL) --mode 0755 liblistenbrainz_plugin.so $(DESTDIR)$(plugindir)
 
 install-strip:
 		$(MAKE) install INSTALL="$(INSTALL) -s"
 
 uninstall:
-		rm -f $(plugindir)/misc/vlc_listenbrainz_plugin.so
+		rm -f $(plugindir)/liblistenbrainz_plugin.so
 
 clean:
-		rm -f vlc_listenbrainz_plugin.so *.o
+		rm -f liblistenbrainz_plugin.so *.o
 
 mostlyclean: clean
 
 SOURCES = listenbrainz.c
 $(SOURCES:%.c=%.o): %: listenbrainz.c
 
-vlc_listenbrainz_plugin.so: $(SOURCES:%.c=%.o)
+liblistenbrainz_plugin.so: $(SOURCES:%.c=%.o)
 		$(CC) $(LDFLAGS) -shared -o $@ $^ $(LIBS)
 
 .PHONY: all install install-strip uninstall clean mostlyclean
