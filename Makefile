@@ -12,6 +12,9 @@ VLC_PLUGIN_DIR := $(shell $(PKG_CONFIG) --variable=pluginsdir vlc-plugin)
 
 plugindir = $(VLC_PLUGIN_DIR)/misc
 
+SOURCES = listenbrainz.c
+SOURCES_DIR = vlc-3.0
+
 override CC += -std=gnu99
 override CPPFLAGS += -DPIC -I. -Isrc
 override CFLAGS += -fPIC
@@ -36,14 +39,13 @@ uninstall:
 		rm -f $(plugindir)/liblistenbrainz_plugin.so
 
 clean:
-		rm -f liblistenbrainz_plugin.so *.o
+		rm -rf liblistenbrainz_plugin.so **/*.o
 
 mostlyclean: clean
 
-SOURCES = listenbrainz.c
-$(SOURCES:%.c=%.o): %: listenbrainz.c
+$(SOURCES:%.c=$(SOURCES_DIR)/%.o): %: $(SOURCES_DIR)/listenbrainz.c
 
-liblistenbrainz_plugin.so: $(SOURCES:%.c=%.o)
+liblistenbrainz_plugin.so: $(SOURCES:%.c=$(SOURCES_DIR)/%.o)
 		$(CC) $(LDFLAGS) -shared -o $@ $^ $(LIBS)
 
 .PHONY: all install install-strip uninstall clean mostlyclean
