@@ -41,9 +41,11 @@ clean:
 mostlyclean: clean
 
 SOURCES = listenbrainz.c
-$(SOURCES:%.c=%.o): %: listenbrainz.c
+SOURCES_DIR = vlc-3.0
 
-liblistenbrainz_plugin.so: $(SOURCES:%.c=%.o)
+$(SOURCES:%.c=$(SOURCES_DIR)/%.o): %: listenbrainz.c
+
+liblistenbrainz_plugin.so: $(SOURCES:%.c=$(SOURCES_DIR)/%.o)
 		$(CC) $(LDFLAGS) -shared -o $@ $^ $(LIBS)
 
 .PHONY: all install install-strip uninstall clean mostlyclean
