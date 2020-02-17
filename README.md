@@ -27,8 +27,13 @@ build it as an in tree plugin:
     misc_LTLIBRARIES += liblistenbrainz_plugin.la
     ```
 4. Build VLC.
-5. Run VLC and enable the listenbrainz plugin in `Preferences->Interfaces->Control Interfaces`.
-6. Enter your ListenBrainz User Token in the required field. This token can be found in the Profile section of your 
-ListenBrainz Account on the ListenBrainz website.
+
+### Using the plugin
+1. If you compiled the plugin yourself, you can skip this step. Copy the file to `<vlc-plugin-directory>\misc`. To find 
+the plugin directory on a linux machine, execute `pkg-config --variable=pluginsdir vlc-plugin
+` in the terminal.
+2. Run VLC. In the `Preferences->Interfaces->Control Interfaces` section, enable the listenbrainz plugin. If the plugin 
+does not show up in the list, you might need to clear the plugins cache or reset your preferences.
+3. Enter your ListenBrainz User Token in the required field. This token can be found in the Profile section of your 
 
 You are all set to submit listens from VLC to ListenBrainz.
