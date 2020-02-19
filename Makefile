@@ -18,34 +18,49 @@ SOURCES_DIR = vlc-3.0
 override CC += -std=gnu99
 override CPPFLAGS += -DPIC -I. -Isrc
 override CFLAGS += -fPIC
-override LDFLAGS += -Wl,-no-undefined,-z,defs
 
 override CPPFLAGS += -DMODULE_STRING=\"listenbrainz\"
 override CFLAGS += $(VLC_PLUGIN_CFLAGS)
 override LIBS += $(VLC_PLUGIN_LIBS)
 
-TARGETS = liblistenbrainz_plugin.so
+ifeq ($(OS),Windows_NT)
+  SUFFIX := dll
+  override LDFLAGS += -Wl,-no-undefined
+else
+  SYSTEM_NAME=$(shell uname -s)
+  ifeq ($(SYSTEM_NAME),Linux)
+    SUFFIX := so
+    override LDFLAGS += -Wl,-no-undefined
+  else 
+    ifeq ($(SYSTEM_NAME),Darwin)
+      SUFFIX := dylib
+      override LDFLAGS += -Wl
+    endif
+  endif
+endif
 
-all: liblistenbrainz_plugin.so
+TARGETS = liblistenbrainz_plugin.$(SUFFIX)
+
+all: liblistenbrainz_plugin.$(SUFFIX)
 
 install: all
 		mkdir -p -- $(DESTDIR)$(plugindir)
-		$(INSTALL) --mode 0755 liblistenbrainz_plugin.so $(DESTDIR)$(plugindir)
+		$(INSTALL) --mode 0755 liblistenbrainz_plugin.$(SUFFIX) $(DESTDIR)$(plugindir)
 
 install-strip:
 		$(MAKE) install INSTALL="$(INSTALL) -s"
 
 uninstall:
-		rm -f $(plugindir)/liblistenbrainz_plugin.so
+		rm -f $(plugindir)/liblistenbrainz_plugin.$(SUFFIX)
 
 clean:
-		rm -rf liblistenbrainz_plugin.so **/*.o
+		rm -rf liblistenbrainz_plugin.$(SUFFIX) **/*.o
 
 mostlyclean: clean
 
 $(SOURCES:%.c=$(SOURCES_DIR)/%.o): %: $(SOURCES_DIR)/listenbrainz.c
 
-liblistenbrainz_plugin.so: $(SOURCES:%.c=$(SOURCES_DIR)/%.o)
+liblistenbrainz_plugin.$(SUFFIX): $(SOURCES:%.c=$(SOURCES_DIR)/%.o)
 		$(CC) $(LDFLAGS) -shared -o $@ $^ $(LIBS)
 
 .PHONY: all install install-strip uninstall clean mostlyclean

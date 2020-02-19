@@ -27,20 +27,16 @@
  * Preamble
  *****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #define _GNU_SOURCE
-#include <stdio.h>
+#define VLC_MODULE_LICENSE VLC_LICENSE_GPL_2_PLUS
 
+#define HAVE_POLL_H 1
+#include <poll.h>
+#include <stdio.h>
 #include <assert.h>
 #include <time.h>
-#ifdef HAVE_POLL
-# include <poll.h>
-#endif
 
-#define VLC_MODULE_LICENSE VLC_LICENSE_GPL_2_PLUS
 #include <vlc_common.h>
 #include <vlc_plugin.h>
 #include <vlc_interface.h>
@@ -331,7 +327,7 @@ static int PlayingChange(vlc_object_t *p_this, const char *psz_var,
             mtime_t time_paused = current_time - p_sys->time_pause;
             p_sys->time_total_pauses += time_paused;
 
-            msg_Dbg(p_intf, "Pause duration: %ld", (time_paused / 1000000));
+            msg_Dbg(p_intf, "Pause duration: %"PRIu64, (time_paused / 1000000));
             //check whether duration of pause is more than 60s
             if ((time_paused / 1000000) > 60) {
                 int64_t played_time = current_time - p_sys->p_current_song.i_start - p_sys->time_total_pauses;
@@ -534,7 +530,7 @@ static void *Run(void *data)
         if (!psz_submission_url)
             goto out;
 
-        i_ret = asprintf(&psz_url, "https://%s/1/submit-listens", psz_submission_url);
+        i_ret = snprintf(psz_url, sizeof(psz_submission_url) * 2, "https://%s/1/submit-listens", psz_submission_url);
 
         free(psz_submission_url);
         if (i_ret == -1)
