@@ -19,28 +19,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
  *****************************************************************************/
 
-/* ListenBrainz Submit Listens API 1
+/* 
+ * ListenBrainz Submit Listens API 1
  * https://api.listenbrainz.org/1/submit-listens
- *
  */
 /*****************************************************************************
  * Preamble
  *****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
+#define _GNU_SOURCE
+#define VLC_MODULE_LICENSE VLC_LICENSE_GPL_2_PLUS
+
+#ifdef _WIN32
+#include <winsock2.h>
+#include <windows.h>
+#define HAVE_POLL_H 0
+#else
+#define HAVE_POLL_H 1
+#include<poll.h>
 #endif
 
-#define _GNU_SOURCE
 #include <stdio.h>
-
 #include <assert.h>
 #include <time.h>
-#ifdef HAVE_POLL
-# include <poll.h>
-#endif
 
-#define VLC_MODULE_LICENSE VLC_LICENSE_GPL_2_PLUS
 #include <vlc_common.h>
 #include <vlc_plugin.h>
 #include <vlc_interface.h>
@@ -331,7 +333,7 @@ static int PlayingChange(vlc_object_t *p_this, const char *psz_var,
             mtime_t time_paused = current_time - p_sys->time_pause;
             p_sys->time_total_pauses += time_paused;
 
-            msg_Dbg(p_intf, "Pause duration: %ld", (time_paused / 1000000));
+            msg_Dbg(p_intf, "Pause duration: %"PRIu64, (time_paused / 1000000));
             //check whether duration of pause is more than 60s
             if ((time_paused / 1000000) > 60) {
                 int64_t played_time = current_time - p_sys->p_current_song.i_start - p_sys->time_total_pauses;
