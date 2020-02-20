@@ -8,16 +8,59 @@ As of now, this plugin is not included with the official VLC distributions. Once
  VLC yourself. 
  
 #### Compiling out of tree
-Here are the instructions to build the plugin file on a linux distribution:
-1. Follow The instructions at https://wiki.videolan.org/OutOfTreeCompile/ to install the VLC development files.
+##### Linux
+1. Follow [these instructions](https://wiki.videolan.org/OutOfTreeCompile/) to install the VLC development files.
 2. Clone this git repository.
-3. Execute `cd <path-to-repository\vlc-3.0`
-4. Run `sudo make install`.
+3. `cd` into the repository. Run `sudo make install`.
+
 The plugin shared library file will be generated and copied to the VLC plugins folder. 
+##### Windows
+There are two ways to compile the plugin for windows: 
+- cross-compiling for Windows on a linux machine. The steps are similar to cross compiling VLC. For details, see 
+[this](https://forum.videolan.org/viewtopic.php?t=146175).
+- using Cygwin, MSYS2, MINGW or any other toolchain on windows. The steps should be more or less the same irrespective 
+of the toolchain. 
+
+Here are the instructions to build using MSYS2 on Windows:
+1. Install the mingw64 toolchain and other required packages. 
+    ```shell script
+    pacman -S base-devel mingw-w64-x86_64-toolchain pkg-config make
+    ```
+2. Obtain the libVLC SDK by downloading .7z or .zip VLC archive. Extract the archive. Open MINGW shell from MSYS directory.
+ `cd` into the extracted vlc archive. Then, execute
+    ```shell script
+    cd sdk
+    sed -i "s|^prefix=.*|prefix=${PWD}|g" lib/pkgconfig/*.pc
+    export PKG_CONFIG_PATH="${PWD}/lib/pkgconfig:$PKG_CONFIG_PATH"
+    ```
+3. Clone this git repository.
+4. `cd` into the repository. Run `make`.
+The __liblistenbrainz_plugin.dll__ file will be generated.
+
+##### macOS
+1. Install development toolchain. Launch the Terminal and type the following command:
+    ```shell script
+    brew install make gcc pkg-config
+    ```
+2. VLC for macOS contains all libVLC SDK files except some header and pkg-config files. The missing files from libVLC SDK 
+for Windows.
+    ```shell script
+    curl -OL ftp://ftp.videolan.org/pub/videolan/vlc/3.0.8/win64/vlc-3.0.8-win64.7z
+    brew install p7zip
+    7za x vlc-3.0.8-win64.7z -owin-sdk sdk\* -r
+    
+    mkdir macos-sdk && cd macos-sdk
+    cp -r /Applications/VLC.app/Contents/MacOS/{include,lib} .
+    cp -r ../win-sdk/vlc-3.0.8/sdk/include/vlc/plugins ./include/vlc/
+    cp -r ../win-sdk/vlc-3.0.8/sdk/lib/pkgconfig ./lib/
+    sed -i "" "s|^prefix=.*|prefix=${PWD}|g" lib/pkgconfig/*.pc
+    export PKG_CONFIG_PATH="${PWD}/lib/pkgconfig"
+    ```
+3. Clone this git repository.
+4. `cd` into the repository. Run `make`. The __liblistenbrainz_plugin.dylib__ file will be generated.
 
 #### Compiling in tree
-macOS has no OS-provided package manager. Thus, the plugin can only be compiled in tree. Here are the instructions to 
-build it as an in tree plugin:
+Here are the instructions to build the plugin as an in tree plugin:
 1. Clone the VLC git repo.
 2. Copy the `vlc-3.0\listenbrainz.c` file from this repository to `<your local vlc repo path>\modules\misc` directory.
 3. Add the following lines to `Makefile.am` in `<your local vlc repo path>\modules\misc`.
@@ -29,11 +72,13 @@ build it as an in tree plugin:
 4. Build VLC.
 
 ### Using the plugin
-1. If you compiled the plugin yourself, you can skip this step. Copy the file to `<vlc-plugin-directory>\misc`. To find 
-the plugin directory on a linux machine, execute `pkg-config --variable=pluginsdir vlc-plugin
-` in the terminal.
-2. Run VLC. In the `Preferences->Interfaces->Control Interfaces` section, enable the listenbrainz plugin. If the plugin 
+1. - Linux: If you compiled the plugin yourself, you can skip this step. Copy the file to __<vlc-plugin-directory>\misc__.
+ To find the plugin directory, execute `pkg-config --variable=pluginsdir vlc-plugin` in the terminal.
+   - macOS: Go to __Finder->Applications__ and right click on __VLC__. Click on __Show Package Contents__. Browse the 
+   __Contents\MacOS\plugins__ folder. Copy the __liblistenbrainz_plugin.dylib__ here.
+   - Windows: Copy the __liblistenbrainz_plugin.dll__ to __<vlc-installation-directory>\plugins\misc__.
+2. Run VLC. In the __Preferences->Interfaces->Control Interfaces__ section, enable the listenbrainz plugin. If the plugin 
 does not show up in the list, you might need to clear the plugins cache or reset your preferences.
-3. Enter your ListenBrainz User Token in the required field. This token can be found in the Profile section of your 
+3. Enter your ListenBrainz User Token in the required field. This token can be found in the Profile section of your profile.
 
 You are all set to submit listens from VLC to ListenBrainz.
