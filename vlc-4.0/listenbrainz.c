@@ -1,5 +1,5 @@
 /*****************************************************************************
- * listenbrainz.c : listenbrainz submission plugin
+ * listenbrainz.c : ListenBrainz submission plugin
  *****************************************************************************
  *
  * Author: Kartik Ohri <kartikohri13 at gmail com>
@@ -100,14 +100,14 @@ static void Close           (vlc_object_t *);
 static void *Run            (void *);
 
 #define USERTOKEN_TEXT      N_("User token")
-#define USERTOKEN_LONGTEXT  N_("The user token of your listenbrainz account")
+#define USERTOKEN_LONGTEXT  N_("The user token of your ListenBrainz account")
 #define URL_TEXT            N_("Submission URL")
 #define URL_LONGTEXT        N_("The URL set for an alternative ListenBrainz instance")
 
-/* This error value is used when listenbrainz plugin has to be unloaded. */
+/* This error value is used when ListenBrainz plugin has to be unloaded. */
 #define VLC_LISTENBRAINZ_EFATAL -72
 
-/* listenbrainz client identifier */
+/* ListenBrainz client identifier */
 #define CLIENT_NAME     PACKAGE
 #define CLIENT_VERSION  VERSION
 
@@ -119,7 +119,7 @@ vlc_module_begin ()
     set_category(CAT_INTERFACE)
     set_subcategory(SUBCAT_INTERFACE_CONTROL)
     set_shortname(N_("Listenbrainz"))
-    set_description(N_("Submission of played songs to listenbrainz"))
+    set_description(N_("Submission of played songs to ListenBrainz"))
     add_string("listenbrainz-usertoken", "", USERTOKEN_TEXT, USERTOKEN_LONGTEXT, false)
     add_string("submission-url", "api.listenbrainz.org", URL_TEXT, URL_LONGTEXT, false)
     set_capability("interface", 0)
@@ -363,7 +363,7 @@ static void playlist_on_current_index_changed(vlc_playlist_t *playlist,
     }
 
     sys->time_total_pauses = 0;
-    time(&sys->p_current_song.date);                /* to be sent to listenbrainz */
+    time(&sys->p_current_song.date);                /* to be sent to ListenBrainz */
     sys->p_current_song.i_start = vlc_tick_now();   /* only used locally */
 
     if (input_item_IsPreparsed(item))
@@ -499,7 +499,7 @@ static void *Run(void *data)
     char                    *psz_url, *psz_submission_url;
     int                     i_ret;
     time_t                  timestamp;
-    /* data about listenbrainz session */
+    /* data about ListenBrainz session */
     vlc_tick_t              next_exchange = VLC_TICK_INVALID; /**< when can we send data  */
     unsigned int            i_interval = 0;     /**< waiting interval (secs)*/
 
@@ -533,7 +533,7 @@ static void *Run(void *data)
             vlc_dialog_display_error(p_intf,
                                      _("Listenbrainz usertoken not set"),
                                      "%s", _("Please set a user token or disable the "
-                                             "listenbrainz plugin, and restart VLC.\n"
+                                             "ListenBrainz plugin, and restart VLC.\n"
                                              "Visit https://listenbrainz.org/profile/ to get a user token."));
             goto out;
         }
