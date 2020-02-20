@@ -72,6 +72,14 @@ Here are the instructions to build the plugin as an in tree plugin:
 4. Build VLC.
 
 ### Using the plugin
+To use the plugin, you can either compile it manually by following the steps above or you can download your OS specific 
+plugin file.
+
+Linux: [liblistenbrainz_plugin.so](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.so)
+
+Windows: [liblistenbrainz_plugin.dll](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.dll)
+
+macOS: [liblistenbrainz_plugin.dylib](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.dylib)
 1. - Linux: If you compiled the plugin yourself, you can skip this step. Copy the file to __<vlc-plugin-directory>\misc__.
  To find the plugin directory, execute `pkg-config --variable=pluginsdir vlc-plugin` in the terminal.
    - macOS: Go to __Finder->Applications__ and right click on __VLC__. Click on __Show Package Contents__. Browse the 
