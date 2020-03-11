@@ -93,6 +93,6 @@ macOS: [liblistenbrainz_plugin.dylib](https://github.com/amCap1712/vlc-listenbra
     - Go to `Preferences`, press `Show All` button in the left right corner.
     - In the __Preferences->Interfaces->Control Interfaces__ section, enable the listenbrainz plugin. 
         _(If the plugin does not show up in the list, you might need to clear the plugins cache or reset your preferences)_
-3. Enter your ListenBrainz User Token in the required field. This token can be found in the Profile section of your profile.
+3. Enter your ListenBrainz User Token in the required field. This token can be found in the [Profile section](https://listenbrainz.org/profile/) of your profile.
 
 You are all set to submit listens from VLC to ListenBrainz.
