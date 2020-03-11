@@ -80,13 +80,19 @@ Linux: [liblistenbrainz_plugin.so](https://github.com/amCap1712/vlc-listenbrainz
 Windows: [liblistenbrainz_plugin.dll](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.dll)
 
 macOS: [liblistenbrainz_plugin.dylib](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.dylib)
-1. - Linux: If you compiled the plugin yourself, you can skip this step. Copy the file to __<vlc-plugin-directory>\misc__.
+1. - **Linux**: If you compiled the plugin yourself, you can skip this step. Copy the file to __<vlc-plugin-directory>\misc__.
  To find the plugin directory, execute `pkg-config --variable=pluginsdir vlc-plugin` in the terminal.
-   - macOS: Go to __Finder->Applications__ and right click on __VLC__. Click on __Show Package Contents__. Browse the 
-   __Contents\MacOS\plugins__ folder. Copy the __liblistenbrainz_plugin.dylib__ here.
-   - Windows: Copy the __liblistenbrainz_plugin.dll__ to __<vlc-installation-directory>\plugins\misc__.
-2. Run VLC. In the __Preferences->Interfaces->Control Interfaces__ section, enable the listenbrainz plugin. If the plugin 
-does not show up in the list, you might need to clear the plugins cache or reset your preferences.
-3. Enter your ListenBrainz User Token in the required field. This token can be found in the Profile section of your profile.
+   - **macOS**: Go to __Finder->Applications__ and right click on __VLC__. 
+        - Click on __Show Package Contents__ and browse the 
+   __Contents\MacOS\plugins__ folder (`/Applications/VLC.app/Contents/MacOS/plugins`)
+        - Copy the __liblistenbrainz_plugin.dylib__ to `plugins` folder
+
+   
+   - **Windows**: Copy the __liblistenbrainz_plugin.dll__ to __<vlc-installation-directory>\plugins\misc__.
+2. Run VLC. 
+    - Go to `Preferences`, press `Show All` button in the left right corner.
+    - In the __Preferences->Interfaces->Control Interfaces__ section, enable the listenbrainz plugin. 
+        _(If the plugin does not show up in the list, you might need to clear the plugins cache or reset your preferences)_
+3. Enter your ListenBrainz User Token in the required field. This token can be found in the [Profile section](https://listenbrainz.org/profile/) of your profile.
 
 You are all set to submit listens from VLC to ListenBrainz.
