@@ -601,6 +601,7 @@ static void *Run(void *data)
         vlc_memstream_puts(&req, "Connection: close\r\n");
         vlc_memstream_puts(&req, "Accept-Encoding: identity\r\n");
         vlc_memstream_printf(&req, "Content-Length: %zu\r\n", payload.length);
+        vlc_memstream_puts(&req, "Content-Type: application/json\r\n");
         vlc_memstream_puts(&req, "\r\n");
         /* Could avoid copying payload with iovec... but efforts */
         vlc_memstream_write(&req, payload.ptr, payload.length);
