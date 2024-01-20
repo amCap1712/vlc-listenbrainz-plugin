@@ -577,10 +577,10 @@ static void *Run(void *data)
             listenbrainz_song_t *p_song = &p_sys->p_queue[i_song];
 
             vlc_memstream_printf(&payload, "{\"listened_at\": %"PRIu64, (uint64_t)p_song->date);
-            vlc_memstream_printf(&payload, ", \"track_metadata\": {\"artist_name\": \"%s\", ", vlc_uri_decode(p_song->psz_a));
-            vlc_memstream_printf(&payload, " \"track_name\": \"%s\", ", vlc_uri_decode(p_song->psz_t));
+            vlc_memstream_printf(&payload, ", \"track_metadata\": {\"artist_name\": \"%s\"", vlc_uri_decode(p_song->psz_a));
+            vlc_memstream_printf(&payload, ", \"track_name\": \"%s\"", vlc_uri_decode(p_song->psz_t));
             if (p_song->psz_b != NULL)
-                vlc_memstream_printf(&payload, " \"release_name\": \"%s\"", vlc_uri_decode(p_song->psz_b));
+                vlc_memstream_printf(&payload, ", \"release_name\": \"%s\"", vlc_uri_decode(p_song->psz_b));
             if (p_song->psz_m != NULL)
                 vlc_memstream_printf(&payload, ", \"additional_info\": {\"recording_mbid\":\"%s\"} ", vlc_uri_decode(p_song->psz_m));
             vlc_memstream_printf(&payload, "}}");
