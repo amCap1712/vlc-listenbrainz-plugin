@@ -6,7 +6,34 @@ installation. Out of tree plugins have to manually installed after VLC has been 
 As of now, this plugin is not included with the official VLC distributions. Once this plugin has been tested thoroughly,
  it will be submitted to the official VLC repo. Till then, you can continue to test and try out the plugin by compiling 
  VLC yourself. 
- 
+
+### Using the plugin
+To use the plugin, you can either compile it manually by following the steps below or you can download your OS specific 
+plugin file:
+
+Linux: [liblistenbrainz_plugin.so](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.so)
+
+Windows: [liblistenbrainz_plugin.dll](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.dll)
+
+macOS: [liblistenbrainz_plugin.dylib](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.dylib)
+
+1. - **Linux**: If you compiled the plugin yourself, you can skip this step. Copy the file to __<vlc-plugin-directory>\misc__.
+ To find the plugin directory, execute `pkg-config --variable=pluginsdir vlc-plugin` in the terminal.
+   - **macOS**: Go to __Finder->Applications__ and right click on __VLC__. 
+        - Click on __Show Package Contents__ and browse the 
+   __Contents\MacOS\plugins__ folder (`/Applications/VLC.app/Contents/MacOS/plugins`)
+        - Copy the __liblistenbrainz_plugin.dylib__ to `plugins` folder
+
+   
+   - **Windows**: Copy the __liblistenbrainz_plugin.dll__ to __<vlc-installation-directory>\plugins\misc__.
+2. Run VLC. 
+    - Go to `Preferences`, press `Show All` button in the left right corner.
+    - In the __Preferences->Interfaces->Control Interfaces__ section, enable the listenbrainz plugin. 
+        _(If the plugin does not show up in the list, you might need to clear the plugins cache or reset your preferences)_
+3. Enter your ListenBrainz User Token in the required field (__Preferences->Interfaces->Control Interfaces__). This token can be found in the [Profile section](https://listenbrainz.org/profile/) of your profile.
+
+You are all set to submit listens from VLC to ListenBrainz.
+
 #### Compiling out of tree
 ##### Linux
 1. Follow [these instructions](https://wiki.videolan.org/OutOfTreeCompile/) to install the VLC development files.
@@ -71,28 +98,3 @@ Here are the instructions to build the plugin as an in tree plugin:
     ```
 4. Build VLC.
 
-### Using the plugin
-To use the plugin, you can either compile it manually by following the steps above or you can download your OS specific 
-plugin file.
-
-Linux: [liblistenbrainz_plugin.so](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.so)
-
-Windows: [liblistenbrainz_plugin.dll](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.dll)
-
-macOS: [liblistenbrainz_plugin.dylib](https://github.com/amCap1712/vlc-listenbrainz-plugin/releases/download/v1.0/liblistenbrainz_plugin.dylib)
-1. - **Linux**: If you compiled the plugin yourself, you can skip this step. Copy the file to __<vlc-plugin-directory>\misc__.
- To find the plugin directory, execute `pkg-config --variable=pluginsdir vlc-plugin` in the terminal.
-   - **macOS**: Go to __Finder->Applications__ and right click on __VLC__. 
-        - Click on __Show Package Contents__ and browse the 
-   __Contents\MacOS\plugins__ folder (`/Applications/VLC.app/Contents/MacOS/plugins`)
-        - Copy the __liblistenbrainz_plugin.dylib__ to `plugins` folder
-
-   
-   - **Windows**: Copy the __liblistenbrainz_plugin.dll__ to __<vlc-installation-directory>\plugins\misc__.
-2. Run VLC. 
-    - Go to `Preferences`, press `Show All` button in the left right corner.
-    - In the __Preferences->Interfaces->Control Interfaces__ section, enable the listenbrainz plugin. 
-        _(If the plugin does not show up in the list, you might need to clear the plugins cache or reset your preferences)_
-3. Enter your ListenBrainz User Token in the required field. This token can be found in the [Profile section](https://listenbrainz.org/profile/) of your profile.
-
-You are all set to submit listens from VLC to ListenBrainz.
